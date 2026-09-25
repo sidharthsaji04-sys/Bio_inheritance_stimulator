@@ -1,41 +1,61 @@
-ON PROGRESS🛠️
-"""
-Mendelian Disease Inheritance Simulator
-----------------------------------------
+# Mendelian Inheritance Simulator
 
-BLUEPRINT:
+This is an educational project for exploring Mendelian inheritance and how genotype frequencies can change across successive generations.
 
-1. Parent Genotypes
-   - Take the genotypes of two parents as input.
-   - Start with a simple autosomal recessive disease model.
-   - Example: AA, Aa, aa.
+I built this project to improve my ability to integrate biology with programming and to understand how a biological concept can be translated into a computational model.
 
-2. Allele Separation & Crossing
-   - Split each parent's genotype into individual alleles.
-   - Combine one allele from each parent to create an offspring genotype.
-   - Calculate theoretical inheritance probabilities.
+## Biology Side
 
-3. Offspring Simulation
-   - Generate a large number of offspring using random allele selection.
-   - Compare simulated results with theoretical probabilities.
+### What does this simulator do?
 
-4. Disease Analysis
-   - Analyse each offspring genotype.
-   - Classify offspring as:
-       AA -> unaffected
-       Aa -> carrier
-       aa -> affected
-   - Calculate the percentage/probability of each category.
+The simulator models the inheritance of a simplified autosomal-recessive disorder across several generations.
 
-5. Multiple Generations
-   - Use offspring from one generation as the basis for the next.
-   - Allow the user to simulate multiple generations.
-   - Analyse how genotype and disease probabilities change over generations.
+The disease used as a real-world example is Cystic Fibrosis (CF).
 
-6. Streamlit Interface
-   - Allow users to enter parent genotypes.
-   - Select number of offspring and generations.
-   - Display genotype/disease probabilities.
-   - Visualize changes across generations using graphs.
+Cystic fibrosis is an autosomal-recessive genetic disorder. In a simplified two-allele model, an individual with two disease-associated alleles (`aa`) is considered affected, while an individual with one disease-associated allele (`Aa`) is considered a carrier.
 
-   """
+CF primarily affects organs that produce mucus and other secretions, particularly the respiratory and digestive systems. The disease can cause unusually thick and sticky mucus, which can contribute to respiratory infections and other complications.
+
+### Biological Model
+
+The simulation uses a simplified Mendelian model:
+
+* `AA` → unaffected
+* `Aa` → carrier
+* `aa` → affected
+* `Aa × Aa` → possible offspring: `AA`, `Aa`, `Aa`, `aa`
+
+The simulation uses the **Hardy-Weinberg equation** to determine genotype probabilities for selecting background partners.
+
+## Programming Side
+
+The main inputs are:
+
+* Genotypes of the starting parents
+* A background allele frequency (`q`) used to determine genotype probabilities
+
+Hardy-Weinberg proportions are used to calculate the expected frequencies of:
+
+* `AA = p²`
+* `Aa = 2pq`
+* `aa = q²`
+
+A partner is then randomly selected according to these probabilities.
+
+Each generation produces multiple inheritance branches, and the proportions of `AA`, `Aa`, and `aa` are calculated. These results can then be used to examine how genotype frequencies change across successive generations.
+
+## Limitations
+
+This is a **simplified educational model**, not a clinical or population-genetics model.
+
+Real cystic fibrosis genetics is more complex than the simple `A/a` model used here, with many different variants in the **CFTR** gene.
+
+The simulation also uses a simplified family-tree/branching approach rather than modelling an actual human population.
+
+Therefore, the results should be interpreted as outputs of the assumptions used in the simulation rather than predictions about real-world disease inheritance.
+
+## Disclaimer
+
+This project is intended for educational purposes only and should not be used for medical, clinical, or genetic counselling purposes.
+
+This is a personal learning project built by a curious high-school student interested in exploring the connection between biology and programming.
