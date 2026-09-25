@@ -1,6 +1,7 @@
 #Aim- Investigate how parental genotype and population allele frequency influence the simulated probability of an autosomal-recessive disorder across successive generations
 #Disease - Cystic Fibrosis
 import random as rd
+import pandas as pd
 
 class Cross:
    @staticmethod
@@ -55,8 +56,19 @@ class Calculation:
       print('carrier= ',carrier/total*100,'%')
       print('Affected= ',affected/total*100,'%')
 
+   @staticmethod
+   def save_data(generations):
+    data = []
+    for gen_name, generation in generations:
+        for genotype in generation:
+            data.append({
+                'Generation': gen_name,
+                'Genotype': genotype
+            })
+    df = pd.DataFrame(data)
+    df.to_csv('gen_data.csv', index=False)
 
-f1 = Cross.parent_cross("Aa", "Aa")
+f1= Cross.parent_cross("Aa", "Aa")
 f2 = Cross.gens_cross(f1, 0.02)
 f3 = Cross.gens_cross(f2, 0.02)
 f4 = Cross.gens_cross(f3, 0.02)
@@ -67,6 +79,10 @@ f2_percent=Calculation.percent_calculation(f2,'F2')
 f3_percent=Calculation.percent_calculation(f3,'F3')
 f4_percent=Calculation.percent_calculation(f4,'F4')
 
-
-
-
+generations = [
+    ('F1', f1),
+    ('F2', f2),
+    ('F3', f3),
+    ('F4', f4)
+]
+Calculation.save_data(generations)
