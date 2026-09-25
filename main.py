@@ -1,73 +1,72 @@
 #Aim- Investigate how parental genotype and population allele frequency influence the simulated probability of an autosomal-recessive disorder across successive generations
 #Disease - Cystic Fibrosis
 import random as rd
-def crossing(parent1,parent2,q):
-   #Hardy-Weinberg calculation
-   p=1-q
-   AA=p**2
-   Aa=2*p*q
-   aa=q**2
 
-   offspring=[]
-   possible_genos=['AA','Aa','aa']
-   for allele1 in parent1:
-       for allele2 in parent2:
-        genotype1 = ''.join(sorted(allele1 + allele2))
-        offspring.append(genotype1)
+class Cross:
+   @staticmethod
+   def parent_cross(parent1, parent2):
+      offspring=[]
+      for allele1 in parent1:
+         for allele2 in parent2:
+            genotype = ''.join(sorted(allele1 + allele2))
+            offspring.append(genotype)
+      return offspring
 
-   f2_offsprings=[]
-   normal2=0
-   carrier2=0
-   affected2=0
-   print('F2 generation')
-   for off in offspring:
-    partner=rd.choices(possible_genos,weights=[AA,Aa,aa])[0]
-    print(f'{off} - {partner}')
-    for allele1 in off:
-      for allele2 in partner:
-        f2 = ''.join(sorted(allele1 + allele2))
-        f2_offsprings.append(f2)
-        
-        if f2== 'AA':
-           normal2+=1
-           print(f2, '-normal')
-        elif f2=='Aa' or f2=='aA':
-          carrier2+=1
-          print(f2, '-carrier')
-        else:
-           affected2+=1
-           print(f2, '-affected')
-   print("Total analysis: ")
-   total = normal2 + carrier2 + affected2
-   print(f'Total normal- {normal2/total*100:.1f}%',)
-   print(f'Total carrier- {carrier2/total*100:.1f}%')
-   print(f'Total affected- {affected2/total*100:.1f}%')
+   @staticmethod
+   def partner_selection(q):
+      #Hardy-Weinberg calculation
+      p=1-q
+      AA=p**2
+      Aa=2*p*q
+      aa=q**2
+      partner=rd.choices(['AA','Aa','aa'],weights=[AA,Aa,aa])[0]
+      return partner
 
-   print('F3 generations')
-   normal3=0
-   carrier3=0
-   affected3=0
-   for off in f2_offsprings:
-     partner=rd.choices(possible_genos,weights=[AA,Aa,aa])[0]
-     for allele1 in off:
-       for allele2 in partner:
-         f3=allele1 + allele2
-         if f3== 'AA':
-               normal3+=1
-               print(f3, '-normal')
-         elif f3=='Aa' or f3=='aA':
-               carrier3+=1
-               print(f3, '-carrier')
+   @staticmethod
+   def gens_cross(offspring, q):
+      generation=[]
+      for off in offspring:
+         partner=Cross.partner_selection(q)
+         for allele1 in off:
+            for allele2 in partner:
+               gen=''.join(sorted(allele1 + allele2))
+               generation.append(gen)
+      return generation
+
+
+class Calculation:
+   @staticmethod
+   def percent_calculation(generation,gen_name):
+      normal=0
+      carrier=0
+      affected=0
+      for gen in generation:
+         if gen=='AA':
+            normal+=1
+         elif gen=='Aa':
+            carrier+=1
+         elif gen=='aa':
+            affected+=1
          else:
-               affected3+=1
-               print(f3, '-affected')
-
-   print("Total analysis: ")
-   total3 = normal3 + carrier3 + affected3
-   print('Offsprings- ', total3)
-   print(f'Total normal- {normal3/total3*100:.1f}%',)
-   print(f'Total carrier- {carrier3/total3*100:.1f}%')
-   print(f'Total affected- {affected3/total3*100:.1f}%')
+            print('Genotype not found')
+      total=normal+carrier+affected
+      print(f'Percentage assesment of {gen_name}:')
+      print('Normal= ',normal/total*100,'%')
+      print('carrier= ',carrier/total*100,'%')
+      print('Affected= ',affected/total*100,'%')
 
 
-crossing('AA','Aa',0.02)
+f1 = Cross.parent_cross("Aa", "Aa")
+f2 = Cross.gens_cross(f1, 0.02)
+f3 = Cross.gens_cross(f2, 0.02)
+f4 = Cross.gens_cross(f3, 0.02)
+
+
+f1_percent=Calculation.percent_calculation(f1,'F1')
+f2_percent=Calculation.percent_calculation(f2,'F2')
+f3_percent=Calculation.percent_calculation(f3,'F3')
+f4_percent=Calculation.percent_calculation(f4,'F4')
+
+
+
+
